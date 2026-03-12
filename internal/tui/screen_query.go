@@ -185,7 +185,6 @@ func (s *QueryScreen) Update(msg tea.Msg) tea.Cmd {
 				host = "(dsn)"
 			}
 			dbe := dberr.Wrap(s.prof.Driver, "query", host, msg.err)
-			fmt.Fprintln(os.Stderr, dbe.Format())
 			s.errMsg = fmt.Sprintf("[%s] %s", dbe.Code, dbe.Message)
 			s.status = "Error"
 			s.results = nil
