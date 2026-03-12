@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"reflect"
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -64,5 +65,17 @@ func TestNewTabKeyAddsQueryTab(t *testing.T) {
 	}
 	if app.activeQueryTab != 1 {
 		t.Fatalf("activeQueryTab = %d, want 1", app.activeQueryTab)
+	}
+}
+
+func TestQKeyQuitsFromConnectScreen(t *testing.T) {
+	app := NewApp(&profile.Store{})
+
+	_, cmd := app.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'q'}})
+	if cmd == nil {
+		t.Fatal("expected quit command, got nil")
+	}
+	if reflect.ValueOf(cmd).Pointer() != reflect.ValueOf(tea.Quit).Pointer() {
+		t.Fatal("expected tea.Quit command")
 	}
 }

@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"testing"
 
+	tea "github.com/charmbracelet/bubbletea"
+
 	"oslo/internal/db"
 	"oslo/internal/profile"
 )
@@ -49,6 +51,23 @@ func TestFormFieldLabelForSQLiteUsesFilePath(t *testing.T) {
 	want := "File Path"
 	if got != want {
 		t.Fatalf("formFieldLabel(fieldDatabase, sqlite) = %q, want %q", got, want)
+	}
+}
+
+func TestConnectScreenDeleteDoesNotRemoveSession(t *testing.T) {
+	store := &profile.Store{
+		Config: profile.Config{
+			Profiles: []profile.Profile{
+				{Name: "local", Driver: "sqlite", Database: ":memory:"},
+			},
+		},
+	}
+
+	screen := NewConnectScreen(store)
+	_ = screen.updateProfiles(tea.KeyMsg{Type: tea.KeyDelete})
+
+	if len(store.List()) != 1 {
+		t.Fatalf("len(store.List()) = %d, want 1", len(store.List()))
 	}
 }
 

@@ -93,6 +93,17 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return a, tea.Quit
 		}
 
+		if a.screen == ScreenConnect && msg.String() == "q" {
+			a.closeQueryTabs()
+			if a.conn != nil {
+				a.conn.Close()
+			}
+			if a.tunnel != nil {
+				a.tunnel.Close()
+			}
+			return a, tea.Quit
+		}
+
 		if key.Matches(msg, Keys.Help) && a.screen != ScreenHelp {
 			a.prevScreen = a.screen
 			a.screen = ScreenHelp

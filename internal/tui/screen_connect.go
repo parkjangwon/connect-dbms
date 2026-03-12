@@ -3,7 +3,6 @@ package tui
 import (
 	"context"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/charmbracelet/bubbles/key"
@@ -128,14 +127,6 @@ func (s *ConnectScreen) updateProfiles(msg tea.KeyMsg) tea.Cmd {
 		if s.cursor < len(profiles) {
 			return s.connectProfile(&profiles[s.cursor])
 		}
-	case key.Matches(msg, Keys.Delete):
-		if s.cursor < len(profiles) {
-			name := profiles[s.cursor].Name
-			_ = s.store.Remove(name)
-			if s.cursor > 0 {
-				s.cursor--
-			}
-		}
 	}
 	return nil
 }
@@ -187,7 +178,6 @@ func (s *ConnectScreen) connectProfile(p *profile.Profile) tea.Cmd {
 				tunnel.Close()
 			}
 			dbe := dberr.Wrap(p.Driver, "open", host, err)
-			fmt.Fprintln(os.Stderr, dbe.Format())
 			return ErrorMsg{Err: fmt.Errorf("[%s] %s", dbe.Code, dbe.Message)}
 		}
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -198,7 +188,6 @@ func (s *ConnectScreen) connectProfile(p *profile.Profile) tea.Cmd {
 				tunnel.Close()
 			}
 			dbe := dberr.Wrap(p.Driver, "ping", host, err)
-			fmt.Fprintln(os.Stderr, dbe.Format())
 			return ErrorMsg{Err: fmt.Errorf("[%s] %s", dbe.Code, dbe.Message)}
 		}
 		return ConnectedMsg{Profile: p, Driver: drv, Conn: conn, Tunnel: tunnel}
@@ -253,7 +242,7 @@ func (s *ConnectScreen) View() string {
 			}
 		}
 	}
-	leftContent += "\n" + StyleHelp.Render("  Enter: connect  Del: remove")
+	leftContent += "\n" + StyleHelp.Render("  Enter: connect")
 
 	// Right: quick connect form
 	var rightContent string
