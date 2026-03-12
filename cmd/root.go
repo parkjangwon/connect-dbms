@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	cfgFile string
-	verbose bool
+	cfgFile     string
+	showVersion bool
 )
 
 var rootCmd = &cobra.Command{
@@ -21,6 +21,10 @@ MySQL, MariaDB, PostgreSQL, Oracle, SQLite, Tibero, and Cubrid.
 Run without arguments to start the TUI, or use subcommands
 for non-interactive use (great for scripts and AI agents).`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if showVersion {
+			versionCmd.Run(cmd, args)
+			return nil
+		}
 		return runTUI(cmd, args)
 	},
 }
@@ -31,7 +35,7 @@ func Execute() error {
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: ~/.config/connect-dbms/config.json)")
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
+	rootCmd.Flags().BoolVarP(&showVersion, "version", "v", false, "show version")
 
 	rootCmd.AddCommand(queryCmd)
 	rootCmd.AddCommand(configCmd)
