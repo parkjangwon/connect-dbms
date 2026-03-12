@@ -13,7 +13,7 @@ esac
 
 mkdir -p dist
 
-LDFLAGS="-s -w -X oslo/cmd.Version=${TAG#v} -X oslo/cmd.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ) -X oslo/cmd.GitCommit=$(git rev-parse --short HEAD)"
+LDFLAGS="-s -w -X oslo/cmd.Version=${TAG#v} -X oslo/cmd.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ) -X oslo/cmd.GitCommit=$(git rev-parse --short HEAD) -X oslo/cmd.Edition=odbc-full"
 
 if [[ "$OS" == "darwin" ]]; then
   ODBC_PREFIX="$(brew --prefix unixodbc)"

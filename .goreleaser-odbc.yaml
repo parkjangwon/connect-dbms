@@ -36,6 +36,7 @@ builds:
       - -X oslo/cmd.Version={{ .Version }}
       - -X oslo/cmd.BuildDate={{ .Date }}
       - -X oslo/cmd.GitCommit={{ .ShortCommit }}
+      - -X oslo/cmd.Edition=odbc-full
 
   - id: connect-dbms-odbc-linux
     main: .
@@ -58,6 +59,7 @@ builds:
       - -X oslo/cmd.Version={{ .Version }}
       - -X oslo/cmd.BuildDate={{ .Date }}
       - -X oslo/cmd.GitCommit={{ .ShortCommit }}
+      - -X oslo/cmd.Edition=odbc-full
 
 archives:
   - id: odbc

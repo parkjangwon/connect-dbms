@@ -1,10 +1,12 @@
 VERSION ?= 1.0.2
 BUILD_DATE := $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 GIT_COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null || echo "none")
-LDFLAGS := -s -w \
+BASE_LDFLAGS := -s -w \
 	-X oslo/cmd.Version=$(VERSION) \
 	-X oslo/cmd.BuildDate=$(BUILD_DATE) \
 	-X oslo/cmd.GitCommit=$(GIT_COMMIT)
+LDFLAGS := $(BASE_LDFLAGS) -X oslo/cmd.Edition=basic
+ODBC_LDFLAGS_RELEASE := $(BASE_LDFLAGS) -X oslo/cmd.Edition=odbc-full
 UNAME_S := $(shell uname -s)
 ODBC_TAGS := tibero cubrid
 
@@ -27,7 +29,7 @@ build:
 build-all: build-linux build-macos build-windows
 
 build-odbc:
-	$(ODBC_ENV) go build -tags "$(ODBC_TAGS)" -ldflags "$(LDFLAGS)" -o connect-dbms .
+	$(ODBC_ENV) go build -tags "$(ODBC_TAGS)" -ldflags "$(ODBC_LDFLAGS_RELEASE)" -o connect-dbms .
 
 build-linux:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o dist/connect-dbms-linux-amd64 .

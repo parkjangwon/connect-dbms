@@ -47,6 +47,7 @@ builds:
       - -X oslo/cmd.Version={{ .Version }}
       - -X oslo/cmd.BuildDate={{ .Date }}
       - -X oslo/cmd.GitCommit={{ .ShortCommit }}
+      - -X oslo/cmd.Edition=basic
 
 archives:
   - id: basic

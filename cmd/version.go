@@ -13,6 +13,7 @@ var (
 	Version   = "1.0.2"
 	BuildDate = "dev"
 	GitCommit = "none"
+	Edition   = "basic"
 )
 
 var versionCmd = &cobra.Command{
@@ -22,6 +23,7 @@ var versionCmd = &cobra.Command{
 		fmt.Printf("connect-dbms %s\n", Version)
 		fmt.Printf("  build:   %s\n", BuildDate)
 		fmt.Printf("  commit:  %s\n", GitCommit)
+		fmt.Printf("  edition: %s\n", Edition)
 		fmt.Printf("  go:      %s\n", runtime.Version())
 		fmt.Printf("  os/arch: %s/%s\n", runtime.GOOS, runtime.GOARCH)
 		fmt.Printf("  drivers: %s\n", db.AvailableDrivers())
