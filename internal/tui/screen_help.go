@@ -30,7 +30,7 @@ func (s *HelpScreen) View() string {
 		{"F7 / F8", "Next / previous tab"},
 		{"Ctrl+T", "Open table list"},
 		{"Ctrl+N", "New connection"},
-		{"Ctrl+Q", "Quit"},
+		{"q / Ctrl+Q", "Quit"},
 		{"Up / Down", "Move cursor"},
 		{"PgUp / PgDn", "Scroll results"},
 		{"Enter", "Select / confirm"},

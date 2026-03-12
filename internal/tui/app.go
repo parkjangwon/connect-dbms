@@ -255,6 +255,9 @@ func (a *App) statusBar() string {
 	}
 
 	right := "F1:Help Ctrl+Q:Quit"
+	if a.screen == ScreenConnect {
+		right = "F1:Help q:Quit"
+	}
 	if a.conn != nil {
 		if a.screen == ScreenQuery {
 			right = "Ctrl+H:History Ctrl+S:Export Ctrl+Space/F9:Auto F6:NewTab F7/F8:Tabs Ctrl+T:Tables Ctrl+N:NewConn | " + right
