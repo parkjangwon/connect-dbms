@@ -1,4 +1,4 @@
-VERSION ?= 1.0.0
+VERSION ?= 1.0.1
 BUILD_DATE := $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 GIT_COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null || echo "none")
 LDFLAGS := -s -w \
