@@ -1,0 +1,6 @@
+connect-dbms
+oslo
+dist/
+*.exe
+.context/
+.omx/

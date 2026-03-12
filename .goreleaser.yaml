@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+
+version: 2
+
+project_name: connect-dbms
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - id: connect-dbms-basic
+    main: .
+    binary: connect-dbms
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    goarm:
+      - "7"
+    ignore:
+      - goos: darwin
+        goarch: arm
+      - goos: windows
+        goarch: arm64
+      - goos: windows
+        goarch: arm
+      - goos: windows
+        goarch: 386
+      - goos: darwin
+        goarch: 386
+      - goos: linux
+        goarch: 386
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X oslo/cmd.Version={{ .Version }}
+      - -X oslo/cmd.BuildDate={{ .Date }}
+      - -X oslo/cmd.GitCommit={{ .ShortCommit }}
+
+archives:
+  - id: basic
+    ids:
+      - connect-dbms-basic
+    name_template: >-
+      {{ .ProjectName }}-basic-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: checksums.txt
+
+snapshot:
+  version_template: "{{ .Version }}-next"
+
+changelog:
+  sort: asc
+  use: git

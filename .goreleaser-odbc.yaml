@@ -1,0 +1,75 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+
+version: 2
+
+project_name: connect-dbms
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+    - make test-odbc
+
+builds:
+  - id: connect-dbms-odbc-darwin
+    main: .
+    binary: connect-dbms
+    env:
+      - CGO_ENABLED=1
+      - CGO_CFLAGS=-I/opt/homebrew/opt/unixodbc/include
+      - CGO_LDFLAGS=-L/opt/homebrew/opt/unixodbc/lib
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    tags:
+      - tibero
+      - cubrid
+    ldflags:
+      - -s -w
+      - -X oslo/cmd.Version={{ .Version }}
+      - -X oslo/cmd.BuildDate={{ .Date }}
+      - -X oslo/cmd.GitCommit={{ .ShortCommit }}
+
+  - id: connect-dbms-odbc-linux
+    main: .
+    binary: connect-dbms
+    env:
+      - CGO_ENABLED=1
+      - CGO_LDFLAGS=-lodbc
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    tags:
+      - tibero
+      - cubrid
+    ldflags:
+      - -s -w
+      - -X oslo/cmd.Version={{ .Version }}
+      - -X oslo/cmd.BuildDate={{ .Date }}
+      - -X oslo/cmd.GitCommit={{ .ShortCommit }}
+
+archives:
+  - id: odbc
+    ids:
+      - connect-dbms-odbc-darwin
+      - connect-dbms-odbc-linux
+    name_template: >-
+      {{ .ProjectName }}-odbc-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+
+checksum:
+  name_template: checksums-odbc.txt
+
+snapshot:
+  version_template: "{{ .Version }}-next"
+
+changelog:
+  sort: asc
+  use: git
