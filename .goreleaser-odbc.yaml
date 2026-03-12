@@ -4,6 +4,9 @@ version: 2
 
 project_name: connect-dbms
 
+release:
+  replace_existing_artifacts: true
+
 before:
   hooks:
     - go mod tidy
